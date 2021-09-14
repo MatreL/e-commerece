@@ -5,8 +5,9 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { commerce } from '../../lib/commerce';
 
 import FormInput from './FormInput';
+import { Link } from 'react-router-dom';
 
-const AddressForm = ({ checkoutToken, test }) => {
+const AddressForm = ({ checkoutToken, next }) => {
   const [shippingCountries, setShippingCountries] = useState([]);
   const [shippingCountry, setShippingCountry] = useState('');
   const [shippingSubdivisions, setShippingSubdivisions] = useState([]);
@@ -52,14 +53,14 @@ const AddressForm = ({ checkoutToken, test }) => {
     <>
       <Typography variant="h6" gutterBottom>Shipping Adress</Typography>
       <FormProvider {...methods}>
-        <form onSubmit=".">
+        <form onSubmit={methods.handleSubmit((data) => next({ ...data, shippingCountry, shippingOption, shippingSubdivision }))}>
           <Grid container spacing={3}>
-            <FormInput requierd name="firstName" label="First Name" />
-            <FormInput requierd name="lastName" label="Last Name" />
-            <FormInput requierd name="adress" label="Adress" />
-            <FormInput requierd name="email" label="Email" />
-            <FormInput requierd name="city" label="City" />
-            <FormInput requierd name="ZIP" label="ZIP / Post code" />
+            <FormInput name="firstName" label="First Name" />
+            <FormInput name="lastName" label="Last Name" />
+            <FormInput name="adress" label="Adress" />
+            <FormInput name="email" label="Email" />
+            <FormInput name="city" label="City" />
+            <FormInput name="ZIP" label="ZIP / Post code" />
 
             <Grid item xs={12} sm={6}>
               <InputLabel>Shipping Country</InputLabel>
@@ -81,19 +82,24 @@ const AddressForm = ({ checkoutToken, test }) => {
                 ))}
               </Select>
             </Grid>
-            {/*} <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6}>
               <InputLabel>Shipping Options</InputLabel>
-              <Select value={ } fullWidth onChange={ }>
-                <MenuItem key={ } value={ }>
-                  Select me
-                </MenuItem>
+              <Select value={shippingOption} fullWidth onChange={(e) => setShippingOption(e.target.value)}>
+                {shippingOptions.map((sO) => ({ id: sO.id, label: `${sO.description} - (${sO.price.formatted_with_symbol})` })).map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.label}
+                  </MenuItem>
+                ))}
               </Select>
             </Grid>
-
-  {*/}
           </Grid>
+          <br />
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button component={Link} to="/cart" variant="outlined">Back to cart</Button>
+            <Button type="submit" variant="contained" color="primary">Next</Button>
+          </div>
         </form>
-      </FormProvider>
+      </FormProvider >
     </>
   )
 }
