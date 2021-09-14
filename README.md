@@ -8,5 +8,7 @@ This is a ECommerce-Web Shop project i found on Youtube i found interesting. It 
 
 Fun project to do with alot of new and fun stuff to learn in this project. Passing props and using react hooks has been really educational. 
 
+You can use Stripe default credit card on the order with 4242 numbers only.  
+
 
 
