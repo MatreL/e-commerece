@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useHistory } from 'react-router-dom'
-import { Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider, Button, CssBaseline } from '@material-ui/core'
+import React, { useState, useEffect } from 'react';
+import { CssBaseline, Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider, Button } from '@material-ui/core';
+import { Link, useHistory } from 'react-router-dom';
 
-import { commerce } from '../../../lib/commerce'
+import { commerce } from '../../../lib/commerce';
+import AddressForm from '../AdresseForm';
+import PaymentForm from '../PaymentForm';
+import useStyles from './styles';
 
-import useStyles from './styles'
-import AddressForm from '../AdresseForm'
-import PaymentForm from '../PaymentForm'
+const steps = ['Shipping address', 'Payment details'];
 
-const steps = ['Shipping Address', 'Payment details']
-
-const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
+const Checkout = ({ cart, onCaptureCheckout, order, error }) => {
+  const [checkoutToken, setCheckoutToken] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
-  const classes = useStyles()
-  const [shippingData, setShippingData] = useState({})
-  const [checkoutToken, setCheckoutToken] = useState(null)
+  const [shippingData, setShippingData] = useState({});
+  const classes = useStyles();
   const history = useHistory();
-
 
   const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
   const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -26,18 +24,22 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
       const generateToken = async () => {
         try {
           const token = await commerce.checkout.generateToken(cart.id, { type: 'cart' });
-          setCheckoutToken(token)
-        } catch (error) {
+
+          setCheckoutToken(token);
+        } catch {
+          if (activeStep !== steps.length) history.push('/');
         }
       };
-      generateToken()
+
+      generateToken();
     }
   }, [cart]);
 
   const test = (data) => {
-    setShippingData(data)
+    setShippingData(data);
+
     nextStep();
-  }
+  };
 
   let Confirmation = () => (order.customer ? (
     <>
@@ -65,9 +67,9 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
     );
   }
 
-  const Form = () => activeStep === 0
+  const Form = () => (activeStep === 0
     ? <AddressForm checkoutToken={checkoutToken} nextStep={nextStep} setShippingData={setShippingData} test={test} />
-    : <PaymentForm shippingData={shippingData} checkoutToken={checkoutToken} nextStep={nextStep} backStep={backStep} onCaptureCheckout={onCaptureCheckout} />
+    : <PaymentForm checkoutToken={checkoutToken} nextStep={nextStep} backStep={backStep} shippingData={shippingData} onCaptureCheckout={onCaptureCheckout} />);
 
   return (
     <>
@@ -77,9 +79,9 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
         <Paper className={classes.paper}>
           <Typography variant="h4" align="center">Checkout</Typography>
           <Stepper activeStep={activeStep} className={classes.stepper}>
-            {steps.map((lable) => (
-              <Step key={lable}>
-                <StepLabel>{lable}</StepLabel>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
               </Step>
             ))}
           </Stepper>
@@ -87,7 +89,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
         </Paper>
       </main>
     </>
-  )
-}
+  );
+};
 
-export default Checkout
+export default Checkout;

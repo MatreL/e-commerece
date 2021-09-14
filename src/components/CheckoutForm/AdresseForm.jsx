@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { InputLabel, Select, MenuItem, Button, Grid, Typography } from "@material-ui/core";
+import React, { useState, useEffect } from 'react';
+import { InputLabel, Select, MenuItem, Button, Grid, Typography } from '@material-ui/core';
 import { useForm, FormProvider } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 import { commerce } from '../../lib/commerce';
-
 import FormInput from './FormInput';
-import { Link } from 'react-router-dom';
 
 const AddressForm = ({ checkoutToken, test }) => {
   const [shippingCountries, setShippingCountries] = useState([]);
@@ -51,17 +50,16 @@ const AddressForm = ({ checkoutToken, test }) => {
 
   return (
     <>
-      <Typography variant="h6" gutterBottom>Shipping Adress</Typography>
+      <Typography variant="h6" gutterBottom>Shipping address</Typography>
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit((data) => test({ ...data, shippingCountry, shippingOption, shippingSubdivision }))}>
+        <form onSubmit={methods.handleSubmit((data) => test({ ...data, shippingCountry, shippingSubdivision, shippingOption }))}>
           <Grid container spacing={3}>
-            <FormInput name="firstName" label="First name" />
-            <FormInput name="lastName" label="Last name" />
-            <FormInput name="address1" label="Address line 1" />
-            <FormInput name="email" label="Email" />
-            <FormInput name="city" label="City" />
-            <FormInput name="zip" label="Zip / Postal code" />
-
+            <FormInput required name="firstName" label="First name" />
+            <FormInput required name="lastName" label="Last name" />
+            <FormInput required name="address1" label="Address line 1" />
+            <FormInput required name="email" label="Email" />
+            <FormInput required name="city" label="City" />
+            <FormInput required name="zip" label="Zip / Postal code" />
             <Grid item xs={12} sm={6}>
               <InputLabel>Shipping Country</InputLabel>
               <Select value={shippingCountry} fullWidth onChange={(e) => setShippingCountry(e.target.value)}>
@@ -95,13 +93,13 @@ const AddressForm = ({ checkoutToken, test }) => {
           </Grid>
           <br />
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button component={Link} to="/cart" variant="outlined">Back to cart</Button>
+            <Button component={Link} variant="outlined" to="/cart">Back to Cart</Button>
             <Button type="submit" variant="contained" color="primary">Next</Button>
           </div>
         </form>
-      </FormProvider >
+      </FormProvider>
     </>
-  )
-}
+  );
+};
 
-export default AddressForm
+export default AddressForm;
