@@ -13,5 +13,6 @@ Fun project to do with alot of new and fun stuff to learn in this project. Passi
 
 You can use Stripe default credit card on the order with 4242 4242 4242 4242 credit card number, use 12/34 as date of expiration, and any 3 digets as CVC.
 
+Github pages: https://matrel.github.io/e-commerece/ then hit the "Even's" Store logo at the top left corner! 
 
 
